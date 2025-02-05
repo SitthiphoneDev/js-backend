@@ -1,0 +1,31 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by testing tools
+coverage/
+
+# Build outputs
+build/
+dist/
+
+# Environment variables file
+.env
+
+# IDE or editor directories and settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
