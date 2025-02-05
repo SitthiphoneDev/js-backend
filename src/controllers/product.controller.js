@@ -45,14 +45,14 @@ const productController = {
 
     getAll: async (req, res) => {
         try {
-            const products = await Product.find();
+            const products = await Product.find().sort({ createdAt: -1 });
             const populatedProducts = await Promise.all(products.map(async (product) => {
                 const [category, unit] = await Promise.all([
                     Category.findOne({ category_id: product.category_id }),
                     Unit.findOne({ unit_id: product.unit_id })
                 ]);
                 return { ...product.toObject(), category, unit };
-            }).sort);
+            }));
             res.json(populatedProducts);
         } catch (error) {
             res.status(500).json({ error: 'Error fetching products' });

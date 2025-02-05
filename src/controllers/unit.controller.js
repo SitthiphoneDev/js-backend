@@ -5,7 +5,7 @@ const unitController = {
         try {
             const data = req.body;
             let result;
-     
+
             if (Array.isArray(data)) {
                 // Sequential creation to avoid duplicate IDs
                 result = [];
@@ -20,7 +20,7 @@ const unitController = {
                 const unit_id = lastUnit ? lastUnit.unit_id + 1 : 1;
                 result = await Unit.create({ ...data, unit_id });
             }
-     
+
             res.status(201).json({
                 message: 'Unit created successfully',
                 result
@@ -29,7 +29,7 @@ const unitController = {
             console.error('Error creating unit:', error);
             res.status(500).json({ error: 'Error creating unit' });
         }
-     },
+    },
 
     getAll: async (req, res) => {
         try {
