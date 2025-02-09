@@ -64,11 +64,31 @@ const categoryController = {
 
     delete: async (req, res) => {
         try {
-            const result = await Category.findOneAndDelete({ category_id: req.params.id });
-            if (!result) return res.status(404).json({ error: 'Category not found' });
+            // First check if category exists
+            const categoryExists = await Category.findOne({ category_id: req.params.id });
+            if (!categoryExists) {
+                return res.status(404).json({ 
+                    error: `Category ID ${req.params.id} not found` 
+                });
+            }
+    
+            // Then check if any products are using this category
+            const productsUsingCategory = await Product.findOne({ category_id: req.params.id });
+            if (productsUsingCategory) {
+                return res.status(400).json({ 
+                    error: `Cannot delete category ID ${req.params.id}. This category is currently in use by products.`
+                });
+            }
+    
+            // If no products are using it, proceed with deletion
+            await Category.findOneAndDelete({ category_id: req.params.id });
             res.status(200).json({ message: 'Category deleted successfully' });
+    
         } catch (error) {
-            res.status(500).json({ error: 'Error deleting category' });
+            console.error('Delete category error:', error);
+            res.status(500).json({ 
+                error: 'An error occurred while deleting the category'
+            });
         }
     }
 };

@@ -21,11 +21,28 @@ const productSchema = new mongoose.Schema({
     },
     category_id: {
         type: Number,
-        required: true
+        required: true,
+        ref: 'Category',
+        ref: 'Category',
+        validate: {
+            validator: async function(value) {
+                const category = await mongoose.model('Category').findOne({ category_id: value });
+                return category ? true : false;
+            },
+            message: 'Category does not exist'
+        }
     },
     unit_id: {
         type: Number,
-        required: true
+        required: true,
+        ref: 'Unit',
+        validate: {
+            validator: async function(value) {
+                const unit = await mongoose.model('Unit').findOne({ unit_id: value });
+                return unit ? true : false;
+            },
+            message: props => `Unit ID ${props.value} does not exist`
+        }
     }
 }, {
     timestamps: true

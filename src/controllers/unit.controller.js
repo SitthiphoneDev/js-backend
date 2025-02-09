@@ -75,15 +75,31 @@ const unitController = {
 
     delete: async (req, res) => {
         try {
-            const result = await Unit.findOneAndDelete({ unit_id: req.params.id });
-
-            if (!result) {
-                return res.status(404).json({ error: 'Unit not found' });
+            // First check if unit exists
+            const unitExists = await Unit.findOne({ unit_id: req.params.id });
+            if (!unitExists) {
+                return res.status(404).json({ 
+                    error: `Unit ID ${req.params.id} not found` 
+                });
             }
-
+    
+            // Check if any products are using this unit
+            const productsUsingUnit = await Product.findOne({ unit_id: req.params.id });
+            if (productsUsingUnit) {
+                return res.status(400).json({ 
+                    error: `Cannot delete unit ID ${req.params.id}. This unit is currently in use by products.`
+                });
+            }
+    
+            // If no products are using it, proceed with deletion
+            await Unit.findOneAndDelete({ unit_id: req.params.id });
             res.status(200).json({ message: 'Unit deleted successfully' });
+    
         } catch (error) {
-            res.status(500).json({ error: 'Error deleting unit' });
+            console.error('Delete unit error:', error);
+            res.status(500).json({ 
+                error: 'An error occurred while deleting the unit'
+            });
         }
     }
 };
