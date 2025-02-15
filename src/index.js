@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 // TODO: MONGO_URI should be use from .env file
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://sitthiphone:Welcome1%40@js-backend.d88tp.mongodb.net/?retryWrites=true&w=majority&appName=js-backend";
+const MONGO_URI = "mongodb+srv://sitthiphone:Welcome1%40@js-backend.d88tp.mongodb.net/?retryWrites=true&w=majority&appName=js-backend";
 mongoose.connect(MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.error("MongoDB Connection Error:", err));
@@ -24,6 +24,6 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port locahost:${PORT}`));
 
 module.exports = app;
